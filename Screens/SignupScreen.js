@@ -1,9 +1,39 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground ,Alert} from 'react-native';
 
 const SignupScreen = ({ navigation }) => {
-  const handleSignup = () => {
+  const [username, setUsername] = useState('');
+  const [email,setEmail]= useState('')
+  const [password, setPassword] = useState('');
+  const handleSignup = async() => {
     // Handle signup logic
+    try {
+      const response = await fetch('https://healthbybyteblitz.twilightparadox.com/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      });
+
+      if (!response.ok) {
+        // Handle error, e.g., display an error message to the user
+        console.log(response)
+        Alert.alert('Signup failed');
+        return;
+      }
+
+      // Assuming the response contains a token or some indication of successful login
+      const result = await response.json();
+
+      // Handle the result as needed, e.g., store the token and navigate to another screen
+      Alert.alert('Signup successful');
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
   };
 
   const goToLogin = () => {
@@ -22,17 +52,20 @@ const SignupScreen = ({ navigation }) => {
             style={styles.input}
             placeholder="Username"
             placeholderTextColor="#000"
+            onChangeText={setUsername}
           />
           <TextInput
             style={styles.input}
             placeholder="Email"
             placeholderTextColor="#000"
+            onChangeText={setEmail}
           />
           <TextInput
             style={styles.input}
             placeholder="Password"
             secureTextEntry
             placeholderTextColor="#000"
+            onChangeText={setPassword}
           />
           <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
             <Text style={styles.buttonText}>Sign Up</Text>

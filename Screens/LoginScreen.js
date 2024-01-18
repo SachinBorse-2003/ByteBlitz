@@ -1,9 +1,47 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Alert } from 'react-native';
 
 const LoginScreen = ({ navigation }) => {
-  const handleLogin = () => {
-    // Handle login logic
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('https://healthbybyteblitz.twilightparadox.com/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      });
+
+      if (!response.ok) {
+        // Handle error, e.g., display an error message to the user
+        Alert.alert('Login failed');
+        return;
+      }
+
+      // Assuming the response contains a token or some indication of successful login
+      const result = await response.json();
+
+      // Handle the result as needed, e.g., store the token and navigate to another screen
+      Alert.alert('Login successful');
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
+  };
+
+  const handleUsernameChange = (text) => {
+    // Update the username state when the text changes
+    setUsername(text);
+  };
+
+  const handlePasswordChange = (text) => {
+    // Update the password state when the text changes
+    setPassword(text);
   };
 
   const goToSignup = () => {
@@ -22,12 +60,14 @@ const LoginScreen = ({ navigation }) => {
             style={styles.input}
             placeholder="Username"
             placeholderTextColor="#000"
+            onChangeText={handleUsernameChange} // Attach the callback for username changes
           />
           <TextInput
             style={styles.input}
             placeholder="Password"
             secureTextEntry
             placeholderTextColor="#000"
+            onChangeText={handlePasswordChange} // Attach the callback for password changes
           />
           <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
             <Text style={styles.buttonText}>Login</Text>
@@ -40,6 +80,7 @@ const LoginScreen = ({ navigation }) => {
     </ImageBackground>
   );
 };
+
 
 const styles = StyleSheet.create({
   background: {
