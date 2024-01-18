@@ -5,7 +5,7 @@ const SignupScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [email,setEmail]= useState('')
   const [password, setPassword] = useState('');
-  const handleSignup = async() => {
+  const handleSignup = async () => {
     // Handle signup logic
     try {
       const response = await fetch('https://healthbybyteblitz.twilightparadox.com/api/auth/signup', {
@@ -15,26 +15,29 @@ const SignupScreen = ({ navigation }) => {
         },
         body: JSON.stringify({
           username: username,
+          email: email,
           password: password,
         }),
       });
-
+  
+      console.log(await response.text()); // or console.log(await response.json());
+  
       if (!response.ok) {
-        // Handle error, e.g., display an error message to the user
-        console.log(response)
+        console.log(response.status); // Log the status code for debugging
         Alert.alert('Signup failed');
         return;
       }
-
+  
       // Assuming the response contains a token or some indication of successful login
       const result = await response.json();
-
+  
       // Handle the result as needed, e.g., store the token and navigate to another screen
       Alert.alert('Signup successful');
     } catch (error) {
-      console.error('Error during login:', error);
+      console.error('Error during signup:', error);
     }
   };
+  
 
   const goToLogin = () => {
     navigation.navigate('Login');
