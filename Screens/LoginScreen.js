@@ -29,6 +29,7 @@ const LoginScreen = ({ navigation }) => {
 
       // Handle the result as needed, e.g., store the token and navigate to another screen
       Alert.alert('Login successful');
+      navigation.navigate('Home')
     } catch (error) {
       console.error('Error during login:', error);
     }
