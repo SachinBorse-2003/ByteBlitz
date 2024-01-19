@@ -20,23 +20,23 @@ const SignupScreen = ({ navigation }) => {
         }),
       });
   
-      console.log(await response.text()); // or console.log(await response.json());
+      console.log(await response.json());
   
       if (!response.ok) {
         console.log(response.status); // Log the status code for debugging
-        Alert.alert('Signup failed');
+        Alert.alert('Signup failed', 'User already exists or invalid data');
         return;
       }
   
       // Assuming the response contains a token or some indication of successful login
-      const result = await response.json();
+      // You can store the token here if needed
   
-      // Handle the result as needed, e.g., store the token and navigate to another screen
       Alert.alert('Signup successful');
     } catch (error) {
       console.error('Error during signup:', error);
     }
   };
+  
   
 
   const goToLogin = () => {
